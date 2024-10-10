@@ -22,7 +22,7 @@ Prometheus-сервер отправляет http-запрос для получ
 
 Диаграмма взаимодействия:
 
-![](resources/dagram_2.png)
+![](resources/diagram_2.png)
 
 ### Режимы работы
 
