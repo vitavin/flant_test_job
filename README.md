@@ -30,33 +30,45 @@ Prometheus exporter может работать в одном из двух ре
 
 - Режим периодического сбора метрик — сборщик статистических данных в Prometheus exporter собирает статистику в течение определенного периода и кеширует данные в памяти. При получении запроса все данные из кеша будут отправлены в Prometheus. Этот режим снижает нагрузку на Prometheus, а также снижает сетевой трафик между Prometheus exporter и Prometheus. Недостаток режима — необходимость выделения динамического объема памяти для кеширования данных.
 
-- Пассивный режим - в этом режиме за вызов SRT statictic API отвечает пользователькое приложение. Данные будут хранится в Prometheus exporter и отправлятся в Prometheus по запросу.
+- Пассивный режим -  за вызов SRT statictic API отвечает пользователькое приложение. Данные будут хранится в Prometheus exporter и отправлятся в Prometheus по запросу.
 
 ## Развертывание
 
-Основной способ развертывания — в контейнере с помощью манифеста:
+Основной способ развертывания — в среде контейнеризаци (Docker, CRI-O, containerd и другие) с помощью оркестратора Kubernetes.
 
-```yaml
-- name: srt-exporter
-image: {{ $.Values.werf.image.exporter }}
-command:
-- /nimble_exporter
-- -auth_salt=590
-- -auth_hash=xxxx
-ports:
-- containerPort: 9017
-    name: exporter
-    protocol: TCP
-resources:
-    {{ toYaml $.Values.resources.exporter |  nindent 10 }}
-```
+Для развертывания Prometheus exporter:
 
-где:
+1. Добавьте в используемый манифест (например `service.yml`, `deployment.yml`, `pod.yml`) следующие строки:
 
-- `name` — имя контейнера;
-- `image` — образ Docker, содержащий приложение;
-- `command` — команды, которые выполняются при запуске контейнера;
-- `ports` — порты, которые будут открыты для внешних подключений;
-- `resources` — ресурсы, которые выделяются контейнеру.
+    ```yml
+    - name: srt-exporter
+    image: {{ $.Values.werf.image.exporter }}
+    command:
+    - /nimble_exporter
+    - -auth_salt=590
+    - -auth_hash=xxxx
+    ports:
+    - containerPort: 9017
+        name: exporter
+        protocol: TCP
+    resources:
+        {{ toYaml $.Values.resources.exporter |  nindent 10 }}
+    ```
+
+    где:
+
+    - `name` — имя контейнера;
+    - `image` — образ Docker, содержащий приложение;
+    - `command` — команды, которые выполняются при запуске контейнера;
+    - `ports` — порты, которые будут открыты для внешних подключений;
+    - `resources` — ресурсы, которые выделяются контейнеру.
+
+2. Примените обновленный манифест командой:
+
+    ```yml
+    kubectl apply -f <filename>
+    ```
+
+    где `<filename\>` — имя обновленного файла-манифеста, например `deployment.yml`.
 
 Для успешного развертывания также требуется настроить Prometheus и другие компоненты инфраструктуры мониторинга в соответствии с потребностями пользователя.
