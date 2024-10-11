@@ -8,7 +8,7 @@ Prometheus exporter for Nimble SRT (далее — Prometheus exporter) пред
 
 > **Примечание**
 >
-> [SRT (Secure Reliable Transport)](https://github.com/Haivision/srt) — протокол передачи видео- и аудиоданных на основе UDP. Оптимизирован для передачи данных через Интернет с минимальной задержкой.
+> [SRT (Secure Reliable Transport)](https://en.wikipedia.org/wiki/Secure_Reliable_Transport) — протокол передачи видео- и аудиоданных на основе UDP. Оптимизирован для передачи данных через Интернет с минимальной задержкой.
 
 В состав Prometheus exporter входит комплект дашбордов Grafana для визуализации полученных метрик.
 
